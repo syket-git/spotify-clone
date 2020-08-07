@@ -1,0 +1,58 @@
+.player__body{
+    display:flex;
+}
+.menu{
+    display: none !important;
+}
+
+.sidebar{
+    min-width: 230px;
+    flex:0.2;
+    height:100vh;
+    background-color: #040404;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.sidebar__logo{
+    margin-right: auto;
+    height: 70px;
+    padding: 10px;
+}
+.sidebar__title{
+    font-weight: normal;
+    padding: 5;
+    font-size: 15px;
+    margin-left: 12px;
+}
+.sidebar > hr{
+    border: 1px solid #282828;
+    width: 90%;
+    margin: 10px auto;
+}
+
+
+@media all and (max-width: 768px){
+    .sidebar{
+        transform: translate(-250px);
+        position: fixed;
+        top: 29px;
+        left: 0;
+        transition: 1s;
+    }
+    .menu{
+        display:block !important;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 20px;
+        color: #1fc159;
+    }
+    .open{
+        transform: translate(0px);
+        position: fixed;
+        top: 29px;
+        left: 0;
+        z-index:100;
+    }
+}

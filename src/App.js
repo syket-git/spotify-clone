@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import Login from './Login';
+import { getTokenFromURL } from './spotify';
+import SpotifyWebApi from 'spotify-web-api-js';
+import { useDispatch, useSelector } from 'react-redux';
+import { userAction, userToken, userPlaylist, discover_weekly } from './action';
+import Player from './Player';
+
+const spotify = new SpotifyWebApi();
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const store = useSelector((state) => state.userReducer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const hash = getTokenFromURL();
+    window.location.hash = '';
+    const _token = hash.access_token;
+
+    if (_token) {
+      dispatch(userToken(_token));
+      spotify.setAccessToken(_token);
+
+      spotify.getMe().then((user) => {
+        dispatch(userAction(user));
+      });
+
+      spotify.getUserPlaylists().then(playlist => {
+        dispatch(userPlaylist(playlist))
+      })
+
+      spotify.getPlaylist('1oSlx4XxBp12uknXcuhaDg')
+      .then(response => 
+           dispatch(discover_weekly(response))
+          
+          
+        )
+        
+
+
+    }
+  }, [dispatch]);
+
+  return <div className="app">{store.token ? <Player /> : <Login />}</div>;
 }
 
 export default App;
